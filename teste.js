@@ -1,12 +1,14 @@
 // 1) Observe o trecho de código abaixo: int INDICE = 12, SOMA = 0, K = 1; enquanto K < INDICE faça { K = K + 1; SOMA = SOMA + K; } imprimir(SOMA);
 // Ao final do processamento, qual será o valor da variável SOMA?
 function calcularSoma() {
-    let indice = 12, soma = 0, k = 1;
-    while (k < indice) {
-        k = k + 1;
-        soma = soma + k;
-    }
-    return soma;
+  let indice = 12,
+    soma = 0,
+    k = 1;
+  while (k < indice) {
+    k = k + 1;
+    soma = soma + k;
+  }
+  return soma;
 }
 console.log(calcularSoma()); // Resposta: 77.
 
@@ -36,8 +38,30 @@ verifyFibonacci(26); // Resposta: 26 não pertence à sequência de Fibonacci.
 // IMPORTANTE:
 // a) Usar o json ou xml disponível como fonte dos dados do faturamento mensal;
 // b) Podem existir dias sem faturamento, como nos finais de semana e feriados. Estes dias devem ser ignorados no cálculo da média;
+const faturamentoDiario = require("./faturamento.json");
+function analisarFaturamento(faturamentoDiario) {
+  const diasComFaturamento = faturamentoDiario.filter((valor) => valor > 0);
+  const menorFaturamento = Math.min(...diasComFaturamento);
+  const maiorFaturamento = Math.max(...diasComFaturamento);
+  const mediaMensal =
+    diasComFaturamento.reduce((total, valor) => total + valor, 0) /
+    diasComFaturamento.length;
+  const diasAcimaDaMedia = diasComFaturamento.filter(
+    (valor) => valor > mediaMensal
+  ).length;
 
+  return {
+    menorFaturamento,
+    maiorFaturamento,
+    diasAcimaDaMedia,
+  };
+}
 
+const valoresDiarios = faturamentoDiario.map((dia) => dia.valor);
+const resultado = analisarFaturamento(valoresDiarios);
+console.log("Menor faturamento:", resultado.menorFaturamento);
+console.log("Maior faturamento:", resultado.maiorFaturamento);
+console.log("Dias com faturamento acima da média:", resultado.diasAcimaDaMedia);
 
 // 4) Dado o valor de faturamento mensal de uma distribuidora, detalhado por estado:
 // • SP – R$67.836,43
@@ -45,27 +69,31 @@ verifyFibonacci(26); // Resposta: 26 não pertence à sequência de Fibonacci.
 // • MG – R$29.229,88
 // • ES – R$27.165,48
 // • Outros – R$19.849,53
-// Escreva um programa na linguagem que desejar onde calcule o percentual de representação que cada estado teve dentro do valor total mensal da distribuidora.  
+// Escreva um programa na linguagem que desejar onde calcule o percentual de representação que cada estado teve dentro do valor total mensal da distribuidora.
 const faturamento = {
-    SP: 67836.43,
-    RJ: 36678.66,
-    MG: 29229.88,
-    ES: 27165.48,
-    Outros: 19849.53
+  SP: 67836.43,
+  RJ: 36678.66,
+  MG: 29229.88,
+  ES: 27165.48,
+  Outros: 19849.53,
 };
 
 function calcularPercentualFaturamento(faturamentoPorEstado) {
-    const valorTotal = Object.values(faturamentoPorEstado).reduce((total, valor) => total + valor, 0);
-    const percentualPorEstado = {};
-    for (let estado in faturamentoPorEstado) {
-        percentualPorEstado[estado] = (faturamentoPorEstado[estado] / valorTotal * 100).toFixed(2) + '%';
-    }
-    return percentualPorEstado;
+  const valorTotal = Object.values(faturamentoPorEstado).reduce(
+    (total, valor) => total + valor,
+    0
+  );
+  const percentualPorEstado = {};
+  for (let estado in faturamentoPorEstado) {
+    percentualPorEstado[estado] =
+      ((faturamentoPorEstado[estado] / valorTotal) * 100).toFixed(2) + "%";
+  }
+  return percentualPorEstado;
 }
 
 const percentuais = calcularPercentualFaturamento(faturamento);
 for (let estado in percentuais) {
-    console.log(`Estado: ${estado}, Percentual: ${percentuais[estado]}`);
+  console.log(`Estado: ${estado}, Percentual: ${percentuais[estado]}`);
 }
 
 // 5) Escreva um programa que inverta os caracteres de um string. IMPORTANTE:
